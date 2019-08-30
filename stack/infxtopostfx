@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+int top=-1;
+char s[100];
+void push(char a)
+{
+	top++;
+	s[top] = a;
+}
+char pop()
+{
+	char item;
+	item = s[top];
+	top--;
+	return item;
+}
+int preference(char a)
+{
+    if(a=='^')
+    return 3;
+    else if(a=='*'|| a=='/')
+    return 2;
+    else if(a=='+'||a=='-')
+    return 1;
+    else if(a=='(')
+    return 0;
+    else
+    return -1;
+}
+main()
+{
+	char infx[50],pofx[50],ch,elem;
+	int i=0,k=0,count=0;
+	cout<<"Enter the infx expression"<<endl;
+	cin>>infx;
+	while(infx[i++]!='\0')
+	{
+		count++;
+	}
+	for(int j=0;j<count;j++)
+	{
+		ch = infx[j];
+		if(ch=='(')
+		{
+			push(ch);
+		}
+		else if(isalnum(ch))
+		{
+			pofx[k++]=ch;
+		}
+		else if(ch==')')
+		{
+			while(s[top]!='(')
+			{
+				pofx[k++]=s[top];
+				top--;
+			}
+			top--;
+		}
+		else
+		{
+			
+			while(preference(s[top])>=preference(ch))
+			{
+				pofx[k++]=s[top];
+				top--;
+			}
+			push(ch);
+		}
+	}
+	while(top!=-1)
+	{
+		pofx[k++]=pop();
+	}
+	cout<<"The postfix expression of the given infix is"<<endl;
+	cout<<pofx;
+}
